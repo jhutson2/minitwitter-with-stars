@@ -30,6 +30,13 @@ class TweetsController < ApplicationController
     end
   end
 
+  def upvote
+    @tweet = Tweet.find(params[:id])
+    @tweet.votes.create(upvote: true)
+
+    redirect_to tweets_path
+  end
+
   # PATCH/PUT /tweets/1
   def update
     @tweet = Tweet.find(params[:id])

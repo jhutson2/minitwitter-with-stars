@@ -1,5 +1,6 @@
+
 .page-header
-  %h1 Listing tweets
+  %h1 Listing Tweets
 
 .table-responsive
   %table.table.table-striped.table-bordered.table-hover
@@ -10,6 +11,9 @@
         %tr
           %td
             %p
+              = tweet.votes.count
+              = link_to tweets_path(tweet) do
+                %i.fa.fa-heart{"aria-hidden" => "true"}
               = tweet.username
               = distance_of_time_in_words_to_now(tweet.created_at)
               ago
