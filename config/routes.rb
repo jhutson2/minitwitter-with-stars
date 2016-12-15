@@ -1,8 +1,9 @@
 Rails.application.routes.draw do
 
+  devise_for :users
   resources :tweets do
     member do
-      get :upvote
+      get :like
     end
   end
   root "tweets#new"

@@ -1,5 +1,6 @@
 class TweetsController < ApplicationController
   # GET /tweets
+  before_action :authenticate_user!, except:[:index]
   def index
     @tweets = Tweet.all.order("created_at DESC")
   end
@@ -22,6 +23,7 @@ class TweetsController < ApplicationController
   # POST /tweets
   def create
     @tweet = Tweet.new(tweet_params)
+    @tweet.user_name = current_user.email
 
     if @tweet.save
       redirect_to @tweet, notice: 'Tweet was successfully created.'
@@ -30,11 +32,15 @@ class TweetsController < ApplicationController
     end
   end
 
-  def upvote
+  def like
     @tweet = Tweet.find(params[:id])
-    @tweet.votes.create(upvote: true)
+    if @tweet.not_already_hearted?(current_user)
+      @tweet.likes.create(user: current_user)
+      redirect_to tweets_path
+    else
+      redirect_to tweets_path, notice: "sorry, you've already liked this tweet"
+    end
 
-    redirect_to tweets_path
   end
 
   # PATCH/PUT /tweets/1
